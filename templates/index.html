@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+  <div class="profile">
+    <img src="{{ url_for('static', filename='images/profile.jpg') }}" alt="Profile" onerror="this.style.display='none'">
+  </div>
+  <div class="info">
+    <h2>About</h2>
+    <p>{{ data.summary }}</p>
+    <h3>Skills</h3>
+    <p>{{ data.skills | join(', ') }}</p>
+    <h3>Projects</h3>
+    <ul>
+      {% for p in data.projects %}
+        <li><strong>{{ p.name }}</strong> — {{ p.description }}</li>
+      {% endfor %}
+    </ul>
+    <a class="btn" href="/chat">Chat with Me 🤖</a>
+    <a class="btn ghost" href="/download_resume">Download Resume</a>
+  </div>
+</section>
+{% endblock %}

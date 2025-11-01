@@ -1,0 +1,67 @@
+{
+  "name": "ARYAN SINGH",
+  "title": "Aspiring AI Engineer & Software Developer",
+  "location": "Aligarh, INDIA",
+  "email": "mr.singh4095@gmail.com",
+  "linkedin": "LinkedIn",
+  "github": "Github",
+  "leetcode": "Leetcode",
+  "summary": "I'm an aspiring AI Engineer with a strong interest in building smart and data-driven solutions. I enjoy working with Machine Learning, Deep Learning, and Data Science to turn ideas into working models. Skilled in Python, TensorFlow, PyTorch, NumPy, and OpenCV, I like exploring areas like NLP, Computer Vision, and Neural Networks. Through my academic projects and personal work, I've gained hands-on experience in training models, analyzing data, and improving system performance. I'm always eager to learn, solve complex problems, and contribute to real-world AI projects that make an impact.",
+  "education": [
+    {
+      "degree": "Bachelor's in Computer Application",
+      "institution": "Manipal University Jaipur",
+      "years": "2023-2026",
+      "cgpa": 8.0
+    }
+  ],
+  "experience": [
+    {
+      "role": "Python Developer Intern",
+      "company": "Vigility Technologies Pvt Limited",
+      "duration": "may – July, 2024",
+      "description": [
+        "Developed and deployed an AI-powered chatbot using Python, improving user interaction and response automation.",
+        "Implemented Natural Language Processing (NLP) techniques for intent recognition, entity extraction, and conversational flow.",
+        "Integrated chatbot with APIs and backend services, ensuring scalable and efficient performance.",
+        "Strengthened expertise in Python, AI/ML, Flask/Django, and chatbot frameworks, aligning with real-world business use cases."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Build-a-Complete-Medical-Chatbot-with-LLMs-LangChain-Pinecone-Flask-AWS",
+      "description": "The product leverages Python, LangChain, and multiple external APIs to create an intelligent system capable of dynamic decision-making."
+    },
+    {
+      "name": "Library Management System",
+      "description": "Developed RESTful API using Django and DRF, implementing CRUD operations for books, authors, and borrowing management"
+    },
+    {
+      "name": "Vendor Performance Data Analytics End-To-End Project",
+      "description": "SQL, Python, Power BI, Reporting"
+    }
+  ],
+  "certifications": [
+    "McKinsey Forward Program",
+    "Accenture Nordics - Software Engineering Job Simulation",
+    "Career Essentials in Data Analysis",
+    "Career Essentials in GitHub Professional Certificate",
+    "Career Essentials in Software Development",
+    "TCS iON Career Edge - Young Professional"
+  ],
+  "skills": [
+    "Python",
+    "PyTorch",
+    "TensorFlow",
+    "Hugging Face Transformers",
+    "scikit-learn",
+    "spaCy",
+    "Pandas",
+    "NumPy",
+    "OpenCV",
+    "Flask",
+    "Django",
+    "Langchain"
+  ]
+}

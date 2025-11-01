@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="chat-page">
+  <aside class="sidebar">
+    <h3>Contact</h3>
+    <p>{{ data.location }}</p>
+    <p><a href="mailto:{{ data.email }}">{{ data.email }}</a></p>
+    <p><a href="{{ data.linkedin }}" target="_blank">LinkedIn</a></p>
+    <p><a href="{{ data.github }}" target="_blank">GitHub</a></p>
+  </aside>
+  <div class="chat-area">
+    <div id="chat-box" class="chat-box"></div>
+    <div class="controls">
+      <input id="user-input" placeholder="Ask about my projects, skills, or experience..." />
+      <button id="mic-btn" title="Speak">🎤</button>
+      <button id="send-btn">Send</button>
+    </div>
+  </div>
+</section>
+<script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+{% endblock %}
