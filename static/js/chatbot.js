@@ -4,66 +4,66 @@ const chatBox = document.getElementById('chat-box');
 const micBtn = document.getElementById('mic-btn');
 
 sendBtn.addEventListener('click', sendMessage);
-if(userInput) userInput.addEventListener('keypress', e => { if(e.key === 'Enter') sendMessage(); });
+userInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
 
-function appendMessage(cls, text){
-  const d = document.createElement('div');
-  d.className = cls;
-  d.textContent = text;
-  chatBox.appendChild(d);
+// Function to append messages with animation
+function appendMessage(role, text) {
+  const msgDiv = document.createElement('div');
+  msgDiv.classList.add(role);
+  msgDiv.textContent = text;
+  chatBox.appendChild(msgDiv);
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-async function sendMessage(){
-  const msg = userInput.value.trim();
-  if(!msg) return;
-  appendMessage('user', msg);
+// Add typing animation
+function showTyping() {
+  const typingDiv = document.createElement('div');
+  typingDiv.classList.add('bot');
+  typingDiv.innerHTML = `<div class="typing"><span></span><span></span><span></span></div>`;
+  chatBox.appendChild(typingDiv);
+  chatBox.scrollTop = chatBox.scrollHeight;
+  return typingDiv;
+}
+
+async function sendMessage() {
+  const message = userInput.value.trim();
+  if (!message) return;
+
+  appendMessage('user', message);
   userInput.value = '';
-  try{
-    const res = await fetch('/get_response', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({message: msg})
+
+  const typingDiv = showTyping();
+
+  try {
+    const response = await fetch('/get_response', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message })
     });
-    const data = await res.json();
+
+    const data = await response.json();
+    typingDiv.remove();
     appendMessage('bot', data.reply);
-    // speak reply
     speakText(data.reply);
-  }catch(e){
-    appendMessage('bot', 'Error: could not reach server.');
+  } catch (err) {
+    typingDiv.remove();
+    appendMessage('bot', '⚠️ Error connecting to server.');
   }
 }
 
-// Text to Speech using Web Speech API
-function speakText(text){
-  if(!('speechSynthesis' in window)) return;
-  const ut = new SpeechSynthesisUtterance(text);
-  ut.lang = 'en-US';
+// Text to speech
+function speakText(text) {
+  if (!('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-US';
   window.speechSynthesis.cancel();
-  window.speechSynthesis.speak(ut);
+  window.speechSynthesis.speak(utter);
 }
 
-// Speech to Text (microphone)
-let recognition = null;
-if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window){
-  const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
-  recognition = new Rec();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-  recognition.onresult = (e) => {
-    const t = e.results[0][0].transcript;
-    userInput.value = t;
-    sendMessage();
-  };
-  recognition.onerror = (e) => { console.error('Speech error', e); };
-} else {
-  if(micBtn) micBtn.style.display = 'none';
-}
-
-if(micBtn){
-  micBtn.addEventListener('click', ()=>{
-    if(!recognition) return;
-    recognition.start();
+// Optional: glowing mic visual pulse
+if (micBtn) {
+  micBtn.addEventListener('click', () => {
+    micBtn.classList.add('pulse');
+    setTimeout(() => micBtn.classList.remove('pulse'), 1000);
   });
 }
