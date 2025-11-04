@@ -1,99 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aryan Singh | AI Engineer Portfolio</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <style>
-        /* Page-specific animations */
-        .hero h1, .hero h2, .hero p, .hero a {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeUp 0.8s ease forwards;
-        }
-
-        .hero h1 { animation-delay: 0.2s; }
-        .hero h2 { animation-delay: 0.4s; }
-        .hero p { animation-delay: 0.6s; }
-        .hero .btn { animation-delay: 0.8s; }
-
-        @keyframes fadeUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Hero-specific gradient animation */
-        .hero::before {
-            content: "";
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(135deg, #00e0ff33, #9d4edd33);
-            animation: pulseGradient 8s ease infinite;
-            border-radius: 20px;
-            z-index: -1;
-        }
-
-        @keyframes pulseGradient {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.5; }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aryan Singh | AI Engineer Portfolio</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+  <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
 </head>
+
 <body>
+  <!-- Background sound -->
+  <audio id="bg-music" loop autoplay>
+    <source src="{{ url_for('static', filename='audio/ambient.mp3') }}" type="audio/mpeg">
+  </audio>
 
-    <!-- Header -->
-    <header class="site-header">
-        <h1>🚀 Aryan Singh</h1>
-<nav>
-    <a href="/">🏠 Home</a>
-    <a href="/chat">💬 Chat</a>
-    <a href="/download_resume" target="_blank">📄 Resume</a>
-    <a href="{{ contact.linkedin }}" target="_blank">🔗 LinkedIn</a>
-    <a href="{{ contact.github }}" target="_blank">💻 GitHub</a>
-    <a href="{{ contact.leetcode }}" target="_blank">🧮 LeetCode</a>
-</nav>
+  <!-- Header -->
+  <header class="site-header">
+    <h1>🚀 Aryan Singh</h1>
+    <nav>
+      <a href="/">🏠 Home</a>
+      <a href="/chat">💬 Chat</a>
+      <a href="/download_resume" target="_blank">📄 Resume</a>
+      <a href="{{ contact.linkedin }}" target="_blank">🔗 LinkedIn</a>
+      <a href="{{ contact.github }}" target="_blank">💻 GitHub</a>
+      <a href="{{ contact.leetcode }}" target="_blank">🧮 LeetCode</a>
+    </nav>
+  </header>
 
-    </header>
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="profile">
+      <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="Aryan Singh">
+    </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="profile">
-            <img src="{{ url_for('static', filename='img/profile.jpg') }}" alt="Aryan Singh">
-        </div>
+    <div class="info">
+      <h1>Hi, I’m <span style="color: var(--primary);">Aryan Singh</span> 👋</h1>
+      <h2 id="typing-text"></h2>
+      <p>
+        I’m passionate about <strong>AI, ML, and full-stack development</strong>.  
+        I love turning data into intelligent systems that solve real-world problems.
+      </p>
 
-        <div class="info">
-            <h1>Hi, I'm <span style="color: var(--primary);">Aryan Singh</span> 👋</h1>
-            <h2>Aspiring <span style="color: var(--secondary);">AI Engineer</span> & Software Developer</h2>
-            <p>
-                I’m passionate about building intelligent, data-driven solutions using 
-                <strong>Python, Machine Learning, Deep Learning, and AI frameworks</strong>.  
-                I love turning innovative ideas into working products.
-            </p>
+      <div>
+        <a href="/chat" class="btn">💬 Talk to My Chatbot</a>
+        <a href="/download_resume" class="btn" target="_blank">📄 View Resume</a>
+      </div>
+    </div>
+  </section>
 
-            <div>
-                <a href="/chat" class="btn">💬 Talk to My Chatbot</a>
-                <a href="/download_resume" class="btn" target="_blank">📄 View Resume</a>
-                <a href="{{ data.linkedin }}" class="btn" target="_blank">🔗 LinkedIn</a>
-                <a href="{{ data.github }}" class="btn" target="_blank">💻 GitHub</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section class="skills" style="text-align:center; padding:60px 20px;">
-        <h2 style="color: var(--primary); font-size:1.8rem;">🧠 Skills & Technologies</h2>
-        <p style="max-width:800px; margin:20px auto; color:var(--muted);">
-            Python • Java • Flask • React • Node.js • MongoDB • TensorFlow • PyTorch • NumPy • Pandas • OpenCV •
-            Machine Learning • Deep Learning • Computer Vision • NLP • REST APIs • System Design
-        </p>
-    </section>
-
-    <!-- Projects Preview -->
+  <!-- Projects Section -->
 <section class="projects" style="text-align:center; padding:60px 20px;">
     <h2 style="color: var(--secondary); font-size:1.8rem;">💻 Featured Projects</h2>
-
     <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; margin-top:40px;">
         {% for project in projects %}
         <div class="card">
@@ -111,10 +69,15 @@
     </div>
 </section>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <p>© 2025 Aryan Singh — Designed & Developed with ❤️ | Flask + DeepSeek R1</p>
-    </footer>
 
+  <!-- Footer -->
+  <footer class="site-footer">
+    <p>
+      © 2025 Aryan Singh — 
+      <a href="{{ contact.leetcode }}" target="_blank" style="color: var(--primary);">LeetCode</a> • 
+      <a href="{{ contact.github }}" target="_blank" style="color: var(--primary);">GitHub</a> • 
+      <a href="{{ contact.linkedin }}" target="_blank" style="color: var(--primary);">LinkedIn</a>
+    </p>
+  </footer>
 </body>
 </html>
