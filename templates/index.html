@@ -46,13 +46,15 @@
     <!-- Header -->
     <header class="site-header">
         <h1>🚀 Aryan Singh</h1>
-        <nav>
-            <a href="/">🏠 Home</a>
-            <a href="/chat">💬 Chat</a>
-            <a href="/download_resume" target="_blank">📄 Resume</a>
-            <a href="{{ data.linkedin }}" target="_blank">🔗 LinkedIn</a>
-            <a href="{{ data.github }}" target="_blank">💻 GitHub</a>
-        </nav>
+<nav>
+    <a href="/">🏠 Home</a>
+    <a href="/chat">💬 Chat</a>
+    <a href="/download_resume" target="_blank">📄 Resume</a>
+    <a href="{{ contact.linkedin }}" target="_blank">🔗 LinkedIn</a>
+    <a href="{{ contact.github }}" target="_blank">💻 GitHub</a>
+    <a href="{{ contact.leetcode }}" target="_blank">🧮 LeetCode</a>
+</nav>
+
     </header>
 
     <!-- Hero Section -->
@@ -91,47 +93,23 @@
     <!-- Projects Preview -->
 <section class="projects" style="text-align:center; padding:60px 20px;">
     <h2 style="color: var(--secondary); font-size:1.8rem;">💻 Featured Projects</h2>
+
     <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:30px; margin-top:40px;">
-
+        {% for project in projects %}
         <div class="card">
             <div class="card-content">
-                <h3 style="color:var(--primary);">🧩 Enhanced Snake Game</h3>
+                <h3 style="color:var(--primary);">{{ project.title }}</h3>
                 <p style="color:var(--muted); font-size:0.9rem;">
-                    A modern twist on the classic Snake Game built with Python + Pygame.
+                    {{ project.description }}
                 </p>
+                {% if project.link %}
+                <a href="{{ project.link }}" target="_blank" class="btn">🔗 View Project</a>
+                {% endif %}
             </div>
         </div>
-
-        <div class="card">
-            <div class="card-content">
-                <h3 style="color:var(--primary);">🔐 Random Password Generator</h3>
-                <p style="color:var(--muted); font-size:0.9rem;">
-                    Creates ultra-secure passwords with adjustable strength levels.
-                </p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-content">
-                <h3 style="color:var(--primary);">💡 Typing Speed Test App</h3>
-                <p style="color:var(--muted); font-size:0.9rem;">
-                    Measure your typing accuracy and words per minute in real-time.
-                </p>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-content">
-                <h3 style="color:var(--primary);">🤖 AI Resume Chatbot</h3>
-                <p style="color:var(--muted); font-size:0.9rem;">
-                    A smart portfolio chatbot that interacts using DeepSeek R1 + Flask.
-                </p>
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 </section>
-
 
     <!-- Footer -->
     <footer class="site-footer">

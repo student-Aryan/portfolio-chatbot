@@ -14,7 +14,19 @@ MODEL = "deepseek/deepseek-r1"
 
 @app.route('/')
 def home():
-        return render_template('index.html', data=aryan_data)
+    with open('data/Aryan.CV.json', 'r', encoding='utf-8') as f:
+        data = json.load(f)
+
+    # Get projects, contact links, etc.
+    projects = data.get("projects", [])
+    contact = {
+        "linkedin": data.get("linkedin", ""),
+        "github": data.get("github", ""),
+        "leetcode": data.get("leetcode", ""),
+        "resume": "/download_resume"
+    }
+
+    return render_template('index.html', data=data, projects=projects, contact=contact)
 
 @app.route('/chat')
 def chat():
