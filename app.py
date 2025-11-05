@@ -16,6 +16,7 @@ import os, json
 from flask import Flask, render_template
 
 app = Flask(__name__)
+app.secret_key = "0a44e43f2c95c1279c70b07fb8de96d361ae36617cf6de1b3a54ed283cf7eb48"
 
 @app.route('/')
 def home():
