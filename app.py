@@ -12,21 +12,44 @@ with open(BASE_DIR / 'data' / 'aryan_data.json', 'r', encoding='utf-8') as f:
 OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY', 'YOUR_API_KEY_HERE')
 MODEL = "deepseek/deepseek-r1"
 
+import os, json
+from flask import Flask, render_template
+
+app = Flask(__name__)
+
 @app.route('/')
 def home():
-    with open('data/Aryan.CV.json', 'r', encoding='utf-8') as f:
-        data = json.load(f)
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        json_path = os.path.join(base_dir, 'data', 'aryan_data.json')
 
-    # Get projects, contact links, etc.
-    projects = data.get("projects", [])
-    contact = {
-        "linkedin": data.get("linkedin", ""),
-        "github": data.get("github", ""),
-        "leetcode": data.get("leetcode", ""),
-        "resume": "/download_resume"
-    }
+        # Load the JSON data
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
 
-    return render_template('index.html', data=data, projects=projects, contact=contact)
+        # If JSON accidentally loads as list, take the first object
+        if isinstance(data, list) and len(data) > 0:
+            data = data[0]
+
+        # Get projects safely
+        projects = data.get("projects", [])
+
+        contact = {
+            "linkedin": data.get("linkedin", ""),
+            "github": data.get("github", ""),
+            "leetcode": data.get("leetcode", ""),
+            "resume": "/download_resume"
+        }
+
+        return render_template('index.html', data=data, projects=projects, contact=contact)
+
+    except Exception as e:
+        return f"Error loading data: {e}", 500
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
 
 @app.route('/chat')
 def chat():
