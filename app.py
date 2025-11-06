@@ -1,40 +1,33 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory, session
-import json, os, requests
-from pathlib import Path
-
-app = Flask(__name__, static_folder='static')
-app.secret_key = os.getenv('FLASK_SECRET_KEY', 'change_this_to_secure_random_value')
-
-BASE_DIR = Path(__file__).resolve().parent
-with open(BASE_DIR / 'data' / 'aryan_data.json', 'r', encoding='utf-8') as f:
-        aryan_data = json.load(f)
-
-OPENROUTER_API_KEY = os.getenv('OPENROUTER_API_KEY', 'YOUR_API_KEY_HERE')
-MODEL = "deepseek/deepseek-r1"
-
+from flask import Flask, render_template, request, jsonify, session, send_file
 import os, json
-from flask import Flask, render_template
 
+# -----------------------------
+# Flask App Initialization
+# -----------------------------
 app = Flask(__name__)
-app.secret_key = "0a44e43f2c95c1279c70b07fb8de96d361ae36617cf6de1b3a54ed283cf7eb48"
 
+# ✅ Secret Key for session management
+# Uses Render environment variable if available, else fallback
+app.secret_key = os.environ.get("SECRET_KEY", "aryan_super_secret_key_12345")
+
+# -----------------------------
+# Home Route - Portfolio Page
+# -----------------------------
 @app.route('/')
 def home():
     try:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         json_path = os.path.join(base_dir, 'data', 'aryan_data.json')
 
-        # Load the JSON data
+        # ✅ Load JSON data safely
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
-        # If JSON accidentally loads as list, take the first object
+        # Handle accidental list wrapping
         if isinstance(data, list) and len(data) > 0:
             data = data[0]
 
-        # Get projects safely
         projects = data.get("projects", [])
-
         contact = {
             "linkedin": data.get("linkedin", ""),
             "github": data.get("github", ""),
@@ -45,67 +38,74 @@ def home():
         return render_template('index.html', data=data, projects=projects, contact=contact)
 
     except Exception as e:
-        return f"Error loading data: {e}", 500
+        return f"Error loading portfolio data: {e}", 500
 
 
-if __name__ == "__main__":
-    app.run(debug=True)
-
-
+# -----------------------------
+# Chatbot Page Route
+# -----------------------------
 @app.route('/chat')
 def chat():
-        # initialize session chat cache (last 10 messages)
+    try:
+        # Initialize chat history session
         if 'chat_history' not in session:
             session['chat_history'] = []
-        return render_template('chatbot.html', data=aryan_data)
 
+        return render_template('chatbot.html')
+
+    except Exception as e:
+        return f"Error loading chatbot page: {e}", 500
+
+
+# -----------------------------
+# Chatbot API Endpoint
+# -----------------------------
 @app.route('/get_response', methods=['POST'])
 def get_response():
-        user_msg = request.json.get('message', '')
-        # keep session-based short memory
-        history = session.get('chat_history', [])
-        history.append({'role': 'user', 'content': user_msg})
-        # keep only last 8
-        history = history[-8:]
-        # Build system prompt with data context
-        system_prompt = f"""You are Aryan Singh's personal portfolio assistant. Use the structured data provided to answer questions about Aryan's skills, education, experience, projects, and certifications. Be concise, professional, and helpful.
-Data: {json.dumps(aryan_data)}"""
+    try:
+        user_message = request.json.get('message', '').strip()
 
-        messages = [{'role': 'system', 'content': system_prompt}]
-        # add short memory
-        for item in history:
-            messages.append(item)
-        # last user message is included already
-        messages.append({'role': 'user', 'content': user_msg})
+        if not user_message:
+            return jsonify({"reply": "Please type a message to start the chat 🤖"}), 400
 
-        headers = {
-            'Authorization': f'Bearer {OPENROUTER_API_KEY}',
-            'Content-Type': 'application/json'
-        }
+        # Append to session chat history
+        if 'chat_history' not in session:
+            session['chat_history'] = []
 
-        payload = {
-            'model': MODEL,
-            'messages': messages,
-            'temperature': 0.2
-        }
+        session['chat_history'].append({"user": user_message})
 
-        # call OpenRouter Chat Completions
-        try:
-            r = requests.post('https://openrouter.ai/api/v1/chat/completions', headers=headers, json=payload, timeout=20)
-            r.raise_for_status()
-            j = r.json()
-            reply = j['choices'][0]['message']['content']
-        except Exception as e:
-            reply = 'Sorry — I could not reach the AI service. ' + str(e)
+        # ✅ Temporary dummy chatbot reply
+        reply = f"Hi, I'm Aryan's Chatbot 🤖 — you said: {user_message}"
 
-        # update session history
-        history.append({'role': 'assistant', 'content': reply})
-        session['chat_history'] = history[-20:]
-        return jsonify({'reply': reply})
+        # Append bot response to chat history
+        session['chat_history'].append({"bot": reply})
 
+        return jsonify({"reply": reply})
+
+    except Exception as e:
+        return jsonify({"error": f"Something went wrong: {str(e)}"}), 500
+
+
+# -----------------------------
+# Resume Download Route
+# -----------------------------
 @app.route('/download_resume')
 def download_resume():
-        return send_from_directory('static', 'Aryan.CV.pdf', as_attachment=True)
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        resume_path = os.path.join(base_dir, 'data', 'Aryan.CV.pdf')
 
+        if not os.path.exists(resume_path):
+            return "Resume file not found.", 404
+
+        return send_file(resume_path, as_attachment=True)
+
+    except Exception as e:
+        return f"Error while downloading resume: {e}", 500
+
+
+# -----------------------------
+# Run App (for local testing)
+# -----------------------------
 if __name__ == '__main__':
-        app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True, host='0.0.0.0', port=5000)
